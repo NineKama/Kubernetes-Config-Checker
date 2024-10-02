@@ -1,0 +1,29 @@
+# Binaries
+k8s-checker
+k8s-checker.exe
+
+# Compiled object files
+*.o
+*.so
+*.a
+
+# Go coverage tool files
+*.cover
+
+# Editor and IDE configurations
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Go dependency files (for Go modules projects)
+vendor/
+
+# Logs and debug files
+*.log
+*.out
+
+# Temporary files created during editing
+*.tmp
+*.temp
+*~
