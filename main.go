@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
@@ -25,15 +26,21 @@ var validateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		filePath, _ := cmd.Flags().GetString("file")
 
-		fmt.Println(filePath)
 		if filePath == "" {
 			fmt.Println("Error: --file flag is required.")
-			cmd.Usage()
+			if err := cmd.Usage(); err != nil {
+				fmt.Printf("Error displaying usage: %v\n", err)
+			}
 			os.Exit(1)
 		}
 
-		podSpec, err := loadYAMLFile(filePath)
+		// Clean the file path to avoid path traversal attacks
+		cleanedPath := filepath.Clean(filePath)
+
+		podSpec, err := loadYAMLFile(cleanedPath)
 		handleError(err, "Error reading or parsing YAML file")
+
+		// Validation logiic
 		validateContainerResources(podSpec)
 		validateSecurityContext(podSpec)
 		validateServiceAccount(podSpec)
@@ -59,6 +66,7 @@ func main() {
 func loadYAMLFile(filePath string) (podSpec, error) {
 	var spec podSpec
 	yamlFile, err := os.ReadFile(filePath)
+
 	if err != nil {
 		return spec, err
 	}
