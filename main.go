@@ -34,10 +34,7 @@ var validateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		// Clean the file path to avoid path traversal attacks
-		cleanedPath := filepath.Clean(filePath)
-
-		podSpec, err := loadYAMLFile(cleanedPath)
+		podSpec, err := loadYAMLFile(filePath)
 		handleError(err, "Error reading or parsing YAML file")
 
 		// Validation logiic
@@ -63,9 +60,10 @@ func main() {
 	}
 }
 
-func loadYAMLFile(filePath string) (podSpec, error) {
+func loadYAMLFile(Path string) (podSpec, error) {
 	var spec podSpec
-	yamlFile, err := os.ReadFile(filePath)
+	// Clean the file path to avoid path traversal attacks
+	yamlFile, err := os.ReadFile(filepath.Clean(Path))
 
 	if err != nil {
 		return spec, err
