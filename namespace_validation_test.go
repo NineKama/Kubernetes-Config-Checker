@@ -7,38 +7,37 @@ import (
 	"testing"
 )
 
-func TestValidateImmutable_TableDriven(t *testing.T) {
+func TestValidateNamespace_TableDriven(t *testing.T) {
 	tests := []struct {
 		name        string
 		pod         podSpec
 		expectedLog string
 	}{
 		{
-			name: "ConfigMap",
+			name: "Pod with a dummy namespace",
 			pod: podSpec{
-				Kind:      "ConfigMap",
-				Metadata:  metadata{Name: "test-config-map"},
-				Immutable: false,
-			},
-			expectedLog: "ConfigMap test-config-map should be immutable.",
-		},
-		{
-			name: "Secret",
-			pod: podSpec{
-				Kind:      "Secret",
-				Metadata:  metadata{Name: "test-secret"},
-				Immutable: false,
-			},
-			expectedLog: "Secret test-secret should be immutable.",
-		},
-		{
-			name: "ImmutablePod",
-			pod: podSpec{
-				Kind:      "ConfigMap",
-				Metadata:  metadata{Name: "test-config-map"},
-				Immutable: true,
+				Kind:     "Pod",
+				Metadata: metadata{Name: "test-pod", Namespace: "new-namespace"},
 			},
 			expectedLog: "",
+		},
+		{
+			name: "Pod no namespace",
+			pod: podSpec{
+				Kind:      "Pod",
+				Metadata:  metadata{Name: "test-pod"},
+				Immutable: false,
+			},
+			expectedLog: "Pod test-pod should use a separate namespace (not default).",
+		},
+		{
+			name: "Pod default namespace",
+			pod: podSpec{
+				Kind:      "Pod",
+				Metadata:  metadata{Name: "test-pod", Namespace: "default"},
+				Immutable: false,
+			},
+			expectedLog: "Pod test-pod should use a separate namespace (not default).",
 		},
 	}
 
@@ -48,7 +47,7 @@ func TestValidateImmutable_TableDriven(t *testing.T) {
 			log.SetOutput(&logOutput)
 
 			// Call the function under test
-			validateImmutable(testcase.pod)
+			validateNameSpace(testcase.pod)
 
 			// Check log output
 			if !strings.Contains(logOutput.String(), testcase.expectedLog) {
