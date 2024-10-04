@@ -4,7 +4,7 @@
 ## Overview
 
 [![BuildStatus](https://github.com/NineKama/Kubernetes-Config-Checker/actions/workflows/go.yml/badge.svg)](https://github.com/NineKama/Kubernetes-Config-Checker/actions/workflows/go.yml)
-[![codecov](https://codecov.io/github/NineKama/Kubernetes-Config-Checker/graph/badge.svg?token=HZ3N93I48S)]
+[![codecov](https://codecov.io/github/NineKama/Kubernetes-Config-Checker/graph/badge.svg?token=HZ3N93I48S)](https://codecov.io/github/NineKama/Kubernetes-Config-Checker)
 
 Kubernetes Config Checker is a tool designed to validate Kubernetes YAML files against best practices. This CLI tool checks for missing resource requests and limits, security context configurations, namespace usage, and much more. It helps ensure that your Kubernetes configurations are secure and optimized for production use.
 
